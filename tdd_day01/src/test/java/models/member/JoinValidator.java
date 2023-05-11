@@ -45,6 +45,7 @@ public class JoinValidator implements Validator<Member> {
         Pattern alphaP = Pattern.compile("[a-zA-Z]"); // 대소문자 알파벳 포함 여부
         Pattern numP = Pattern.compile("[0-9]"); // 숫자 포함 여부
         Pattern alphaS = Pattern.compile("[_!@#\\$%^&\\*\\(\\)]"); // 특수 문자 포함 여부
+        Pattern emailAlphaS = Pattern.compile("[_!#\\$%^&\\*\\(\\)]"); // @를 제외한 특수 문자 포함 여부
 
         Matcher matcher1 = alphaP.matcher(userPw);
         Matcher matcher2 = numP.matcher(userPw);
@@ -61,6 +62,14 @@ public class JoinValidator implements Validator<Member> {
         if (matcher4.find()) {
             throw new JoinValidationException("아이디에 특수문자를 포함할 수 없습니다");
         }
+
+        /** 이메일 @를 제외한 특수문자 포함여부 체크 */
+        Matcher matcher5 = emailAlphaS.matcher(userEmail);
+        if (matcher5.find()) {
+            throw new JoinValidationException("이메일에 @를 제외한 특수문자를 포함할 수 없습니다");
+        }
+
+
 
         /** 중복가입 체크 */
         if (memberDao.get(userId) != null) {

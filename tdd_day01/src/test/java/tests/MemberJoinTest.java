@@ -149,11 +149,13 @@ public class MemberJoinTest {
     void passwordCheckTest2() {
         assertAll(
                 () -> assertThrows(JoinValidationException.class, () -> {
-                    member.setUserPw("123123123");
+                    member.setUserPw("a!3");
+                    member.setUserPwRe("a!3");
                     joinService.join(member);
                 }),
                 () -> assertThrows(JoinValidationException.class, () -> {
                     member.setUserPw("!!!!!!!!!");
+                    member.setUserPwRe("!!!!!!!!!");
                     joinService.join(member);
                 })
         );
@@ -161,9 +163,18 @@ public class MemberJoinTest {
 
     @Test
     @DisplayName("아이디 문자열 패턴 테스트(특수문자 X) - 실패시 예외발생")
-    void IdCheckTest() {
+    void idCheckTest() {
             assertThrows(JoinValidationException.class, () -> {
             member.setUserId("!!user01");
+            joinService.join(member);
+        });
+    }
+
+    @Test
+    @DisplayName("이메일 문자열 패턴 테스트(@를 제외한 특수문자 X) - 실패시 예외발생")
+    void emailCheckTest() {
+        assertThrows(JoinValidationException.class, () -> {
+            member.setUserEmail("user01@!@#@example.com");
             joinService.join(member);
         });
     }
