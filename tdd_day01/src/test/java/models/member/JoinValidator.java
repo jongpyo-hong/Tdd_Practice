@@ -2,6 +2,7 @@ package models.member;
 
 import validators.Validator;
 
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,7 +46,10 @@ public class JoinValidator implements Validator<Member> {
         Pattern alphaP = Pattern.compile("[a-zA-Z]"); // 대소문자 알파벳 포함 여부
         Pattern numP = Pattern.compile("[0-9]"); // 숫자 포함 여부
         Pattern alphaS = Pattern.compile("[_!@#\\$%^&\\*\\(\\)]"); // 특수 문자 포함 여부
-        Pattern emailAlphaS = Pattern.compile("[_!#\\$%^&\\*\\(\\)]"); // @를 제외한 특수 문자 포함 여부
+        Pattern emailAlphaS = Pattern.compile("^[a-zA-Z0-9]+@[a-zA-Z]+\\.[a-zA-Z]{2,6}$"); // 이메일 양식
+        Pattern emailAlphaS2 = Pattern.compile("^[a-zA-Z0-9]+@[a-zA-Z]+\\.[a-zA-Z]{2,6}+\\.[a-zA-Z]{2,6}$"); // 이메일 양식2
+
+
 
         Matcher matcher1 = alphaP.matcher(userPw);
         Matcher matcher2 = numP.matcher(userPw);
@@ -63,10 +67,14 @@ public class JoinValidator implements Validator<Member> {
             throw new JoinValidationException("아이디에 특수문자를 포함할 수 없습니다");
         }
 
-        /** 이메일 @를 제외한 특수문자 포함여부 체크 */
+        /** 이메일 양식 체크 */
         Matcher matcher5 = emailAlphaS.matcher(userEmail);
-        if (matcher5.find()) {
-            throw new JoinValidationException("이메일에 @를 제외한 특수문자를 포함할 수 없습니다");
+        if (!matcher5.find()) {
+            throw new JoinValidationException("이메일이 올바르지 않습니다");
+        }
+        Matcher matcher6 = emailAlphaS2.matcher(userEmail);
+        if (!matcher6.find()) {
+            throw new JoinValidationException("이메일이 올바르지 않습니다");
         }
 
 

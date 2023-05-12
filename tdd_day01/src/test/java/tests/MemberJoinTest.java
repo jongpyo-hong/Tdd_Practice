@@ -173,10 +173,17 @@ public class MemberJoinTest {
     @Test
     @DisplayName("이메일 문자열 패턴 테스트(@를 제외한 특수문자 X) - 실패시 예외발생")
     void emailCheckTest() {
-        assertThrows(JoinValidationException.class, () -> {
-            member.setUserEmail("user01@!@#@example.com");
-            joinService.join(member);
-        });
+        assertAll(
+                () -> assertThrows(JoinValidationException.class, () -> {
+                    member.setUserEmail("user01@@@@ser.com");
+                    joinService.join(member);
+                }),
+                () -> assertThrows(JoinValidationException.class, () -> {
+                    member.setUserEmail("user01@naver.co.kr.com");
+                    joinService.join(member);
+                })
+        );
+
     }
 
     @Test
