@@ -46,8 +46,7 @@ public class JoinValidator implements Validator<Member> {
         Pattern alphaP = Pattern.compile("[a-zA-Z]"); // 대소문자 알파벳 포함 여부
         Pattern numP = Pattern.compile("[0-9]"); // 숫자 포함 여부
         Pattern alphaS = Pattern.compile("[_!@#\\$%^&\\*\\(\\)]"); // 특수 문자 포함 여부
-        Pattern emailAlphaS = Pattern.compile("^[a-zA-Z0-9]+@[a-zA-Z]+\\.[a-zA-Z]{2,6}$"); // 이메일 양식
-        Pattern emailAlphaS2 = Pattern.compile("^[a-zA-Z0-9]+@[a-zA-Z]+\\.[a-zA-Z]{2,6}+\\.[a-zA-Z]{2,6}$"); // 이메일 양식2
+        Pattern emailAlphaS = Pattern.compile("^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$"); // 이메일 양식
 
 
 
@@ -72,11 +71,6 @@ public class JoinValidator implements Validator<Member> {
         if (!matcher5.find()) {
             throw new JoinValidationException("이메일이 올바르지 않습니다");
         }
-        Matcher matcher6 = emailAlphaS2.matcher(userEmail);
-        if (!matcher6.find()) {
-            throw new JoinValidationException("이메일이 올바르지 않습니다");
-        }
-
 
 
         /** 중복가입 체크 */
